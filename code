@@ -1,0 +1,116 @@
+CREATE TABLE categories (
+  category_code VARCHAR(5) PRIMARY KEY,
+  category VARCHAR(50)
+);
+
+
+
+
+CREATE TABLE businesses (
+business VARCHAR(200) PRIMARY KEY,
+year_founded INT,
+category_code VARCHAR(5),
+country_code CHAR(3)
+)
+
+
+
+
+CREATE TABLE countries (
+country_code CHAR(3) PRIMARY KEY,
+country VARCHAR(50),
+continent VARCHAR(50)
+);
+
+
+
+
+/* Let's begin by looking at the range of the founding years throughout the world. */
+
+SELECT MIN(year_founded), MAX(year_founded) FROM businesses;
+
+
+
+
+
+
+/* How many businesses were founded before 1000? */
+
+SELECT COUNT(business) FROM businesses
+WHERE year_founded < 1000;
+
+
+
+
+
+/* Which businesses were founded before 1000? */
+
+SELECT * FROM businesses
+WHERE year_founded < 1000;
+
+
+
+
+/* What does the older companies in the world do? */
+
+SELECT business, year_founded, businesses.category_code, country_code, categories.category
+FROM businesses
+INNER JOIN categories
+ON businesses.category_code = categories.category_code
+WHERE year_founded < 1000
+ORDER BY year_founded;
+
+
+
+
+/* Which industries are the most common? */
+
+SELECT category, COUNT(category) AS n
+FROM categories AS c
+INNER JOIN businesses AS b
+ON c.category_code = b.category_code
+GROUP BY category
+ORDER BY n DESC
+LIMIT 5;
+
+
+
+
+
+/* Which are the oldest businesses by continent */
+
+SELECT year_founded, c.continent, business
+FROM businesses AS b
+INNER JOIN countries AS c
+ON b.country_code = c.country_code
+ORDER BY year_founded
+LIMIT 5;
+
+
+
+
+
+
+/* Which are the oldest businesses by continent */
+
+SELECT year_founded, c.continent, business
+FROM businesses AS b
+INNER JOIN countries AS c
+ON b.country_code = c.country_code
+ORDER BY year_founded
+LIMIT 10;
+
+
+
+
+
+
+/* Which are the oldest businesses by continent */
+
+SELECT year_founded, c.continent, business
+FROM businesses AS b
+INNER JOIN countries AS c
+ON b.country_code = c.country_code
+ORDER BY year_founded;
+
+
