@@ -114,3 +114,44 @@ ON b.country_code = c.country_code
 ORDER BY year_founded;
 
 
+
+
+/* Joining all three tables for further analysis */
+
+SELECT business, year_founded, category, country, continent
+FROM businesses AS a
+INNER JOIN categories AS b
+ON a.category_code = b.category_code
+INNER JOIN countries AS c
+ON a.country_code = c.country_code
+
+
+
+
+/* Which are the most common categories for the oldest businesses on each continent? */
+
+SELECT c2.continent, c1.category, COUNT(*) AS n
+FROM businesses AS b
+INNER JOIN categories AS c1
+    ON b.category_code = c1.category_code
+INNER JOIN countries AS c2
+    ON b.country_code = c2.country_code
+GROUP BY c2.continent, c1.category
+ORDER BY c2.continent
+
+
+
+
+/* Now let's filter the results to make the list smaller */
+
+SELECT c2.continent, c1.category, COUNT(*) AS n
+FROM businesses AS b
+INNER JOIN categories AS c1
+    ON b.category_code = c1.category_code
+INNER JOIN countries AS c2
+    ON b.country_code = c2.country_code
+GROUP BY c2.continent, c1.category
+HAVING COUNT (*) > 5
+ORDER BY n DESC
+
+
