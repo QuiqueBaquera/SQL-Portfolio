@@ -1,1 +1,193 @@
+/* How many users are there for each treadmill category? */
+
+SELECT product, COUNT(*)
+FROM treadmill
+GROUP BY product;
+
+
+| product | count |
+|---------|-------|
+| "KP781" | 40    |
+| "KP481" | 60    |
+| "KP281" | 80    |
+
+
+
+
+/* Let's find out the average age of customer per treadmill type */
+
+SELECT product, ROUND(AVG(age), 2) AS avg_age
+FROM treadmill
+GROUP BY product;
+
+
+| product | avg_age |
+|---------|---------|
+| "KP781" | 29.10   |
+| "KP481" | 28.90   |
+| "KP281" | 28.55   |
+
+
+
+
+/* What is the average fitness level by marital status? */
+
+/*While resolving this I found out that the columns usage and fitness had the wrong data type, so I changed it to numeric:*/
+
+ALTER TABLE treadmill
+ALTER COLUMN usage TYPE NUMERIC USING usage::NUMERIC;
+
+ALTER TABLE treadmill
+ALTER COLUMN fitness TYPE NUMERIC USING usage::NUMERIC;
+
+
+/*Now we can continue*/
+
+SELECT maritalstatus, ROUND(AVG(fitness), 2)
+FROM treadmill
+GROUP BY maritalstatus;
+
+
+| maritalstatus | round |
+|---------------|-------|
+| "Partnered"   | 3.45  |
+| "Single"      | 3.47  |
+
+
+
+
+/* Which gender covers more miles on average? */
+
+SELECT gender, ROUND(AVG(miles), 2)
+FROM treadmill
+GROUP BY gender;
+
+
+| gender | round  |
+|--------|--------|
+| Female | 90.01  |
+| Male   | 112.83 |
+
+
+
+
+/* What is the average income for each fitness category */
+
+SELECT fitness, ROUND(AVG(income), 2)
+FROM treadmill
+GROUP BY fitness
+ORDER BY ROUND(AVG(income), 2);
+
+
+| fitness | round     |
+|---------|-----------|
+| 2       | 46870.64  |
+| 3       | 47921.75  |
+| 4       | 56403.44  |
+| 5       | 66396.12  |
+| 7       | 81548.50  |
+| 6       | 84483.14  |
+
+
+
+
+/* Which combination of marital status and gender uses the treadmill the most? */
+
+SELECT maritalstatus, gender, ROUND(AVG(miles), 2) AS avg_miles 
+FROM treadmill
+GROUP BY maritalstatus, gender
+ORDER BY avg_miles DESC;
+
+
+| maritalstatus | gender | avg_miles |
+|---------------|--------|-----------|
+| Single        | Male   | 113.21    |
+| Partnered     | Male   | 112.56    |
+| Partnered     | Female | 93.33     |
+| Single        | Female | 84.93     |
+
+
+
+
+/* How many users have more than 15 years of education and run more than 100 miles per week? */
+
+SELECT COUNT(*) 
+FROM treadmill
+WHERE age > 15 AND miles > 100;
+
+
+| count         |
+|---------------|
+| 66            |
+
+
+
+
+/* Which product is the most popular among users with incomes over 50,000? */
+
+SELECT product, COUNT(*)
+FROM treadmill
+WHERE income > 50000
+GROUP BY product
+ORDER BY COUNT(*) DESC;
+
+
+| product | count |
+|---------|-------|
+| KP781   | 35    |
+| KP281   | 32    |
+| KP481   | 30    |
+
+
+
+
+/* What fitness level is most common for each treadmill type */
+
+SELECT product, fitness, COUNT(*)
+FROM treadmill
+GROUP BY product, fitness
+ORDER BY fitness;
+
+
+| product | fitness | count |
+|---------|---------|-------|
+| KP481   | 2       | 14    |
+| KP281   | 2       | 19    |
+| KP781   | 3       | 1     |
+| KP481   | 3       | 31    |
+| KP281   | 3       | 37    |
+| KP781   | 4       | 18    |
+| KP481   | 4       | 12    |
+| KP281   | 4       | 22    |
+| KP481   | 5       | 3     |
+| KP781   | 5       | 12    |
+| KP281   | 5       | 2     |
+| KP781   | 6       | 7     |
+| KP781   | 7       | 2     |
+
+
+
+
+/* What is the gender distribution by fitness level? */
+
+SELECT Fitness, Gender, COUNT(*) AS count
+FROM treadmill
+GROUP BY Fitness, Gender
+ORDER BY Fitness, Gender;
+
+
+| fitness | gender  | count |
+|---------|---------|-------|
+| 2       | Female  | 20    |
+| 2       | Male    | 13    |
+| 3       | Female  | 33    |
+| 3       | Male    | 36    |
+| 4       | Female  | 14    |
+| 4       | Male    | 38    |
+| 5       | Female  | 7     |
+| 5       | Male    | 10    |
+| 6       | Female  | 2     |
+| 6       | Male    | 5     |
+| 7       | Male    | 2     |
+
 
