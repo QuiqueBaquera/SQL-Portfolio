@@ -11,7 +11,7 @@ business VARCHAR(200) PRIMARY KEY,
 year_founded INT,
 category_code VARCHAR(5),
 country_code CHAR(3)
-)
+);
 
 
 
@@ -29,6 +29,7 @@ continent VARCHAR(50)
 
 SELECT MIN(year_founded), MAX(year_founded) FROM businesses;
 
+
 "min"	"max"
 578	1999
 
@@ -40,7 +41,8 @@ SELECT MIN(year_founded), MAX(year_founded) FROM businesses;
 SELECT COUNT(business) FROM businesses
 WHERE year_founded < 1000;
 
-
+"count"
+6
 
 
 
@@ -48,6 +50,14 @@ WHERE year_founded < 1000;
 
 SELECT * FROM businesses
 WHERE year_founded < 1000;
+
+"business"	"year_founded"	"category_code"	"country_code"
+"Kongō Gumi"	578	"CAT6"	"JPN"
+"St. Peter Stifts Kulinarium"	803	"CAT4"	"AUT"
+"The Royal Mint"	886	"CAT12"	"GBR"
+"Monnaie de Paris "	864	"CAT12"	"FRA"
+"Staffelter Hof Winery"	862	"CAT9"	"DEU"
+"Sean's Bar"	900	"CAT4"	"IRL"
 
 
 
