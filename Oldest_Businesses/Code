@@ -50,8 +50,8 @@ WHERE year_founded < 1000;
 SELECT * FROM businesses
 WHERE year_founded < 1000;
 
-|"business"|"year_founded"|"category_code"|"country_code"|
----------------------------------------------------------------
+"business" | "year_founded" | "category_code" | "country_code"
+---------- | -------------- | --------------- | ---------------
 |"Kongō Gumi"|578|"CAT6"|"JPN"|
 ---------------------------------------------------------------
 |"St. Peter Stifts Kulinarium"|8031"CAT4"|"AUT"|
