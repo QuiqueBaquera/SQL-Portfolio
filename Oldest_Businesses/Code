@@ -29,8 +29,9 @@ continent VARCHAR(50)
 
 SELECT MIN(year_founded), MAX(year_founded) FROM businesses;
 
-"min"	"max"
-578	1999
+| min | max  |
+|-----|------|
+| 578 | 1999 |
 
 
 
@@ -40,8 +41,9 @@ SELECT MIN(year_founded), MAX(year_founded) FROM businesses;
 SELECT COUNT(business) FROM businesses
 WHERE year_founded < 1000;
 
-"count"
-6
+| count |
+|-------|
+| 6     |
 
 
 
@@ -71,6 +73,15 @@ ON businesses.category_code = categories.category_code
 WHERE year_founded < 1000
 ORDER BY year_founded;
 
+| Business                      | Year Founded | Category Code | Country Code | Category                       |
+|-------------------------------|--------------|---------------|--------------|--------------------------------|
+| Kongō Gumi                    | 578          | CAT6          | JPN          | Construction                   |
+| St. Peter Stifts Kulinarium   | 803          | CAT4          | AUT          | Cafés, Restaurants & Bars      |
+| Staffelter Hof Winery         | 862          | CAT9          | DEU          | Distillers, Vintners, & Breweries|
+| Monnaie de Paris              | 864          | CAT12         | FRA          | Manufacturing & Production     |
+| The Royal Mint                | 886          | CAT12         | GBR          | Manufacturing & Production     |
+| Sean's Bar                    | 900          | CAT4          | IRL          | Cafés, Restaurants & Bars      |
+
 
 
 
@@ -84,6 +95,13 @@ GROUP BY category
 ORDER BY n DESC
 LIMIT 5;
 
+| Category                       | n  |
+|--------------------------------|----|
+| Banking & Finance              | 37 |
+| Distillers, Vintners, & Breweries | 22 |
+| Aviation & Transport           | 19 |
+| Postal Service                 | 16 |
+| Manufacturing & Production     | 15 |
 
 
 
@@ -97,7 +115,13 @@ ON b.country_code = c.country_code
 ORDER BY year_founded
 LIMIT 5;
 
-
+| Year Founded | Continent | Business                    |
+|--------------|-----------|-----------------------------|
+| 578          | Asia      | Kongō Gumi                  |
+| 803          | Europe    | St. Peter Stifts Kulinarium |
+| 862          | Europe    | Staffelter Hof Winery       |
+| 864          | Europe    | Monnaie de Paris            |
+| 886          | Europe    | The Royal Mint              |
 
 
 
@@ -111,7 +135,18 @@ ON b.country_code = c.country_code
 ORDER BY year_founded
 LIMIT 10;
 
-
+| Year Founded | Continent | Business                    |
+|--------------|-----------|-----------------------------|
+| 578          | Asia      | Kongō Gumi                  |
+| 803          | Europe    | St. Peter Stifts Kulinarium |
+| 862          | Europe    | Staffelter Hof Winery       |
+| 864          | Europe    | Monnaie de Paris            |
+| 886          | Europe    | The Royal Mint              |
+| 900          | Europe    | Sean's Bar                  |
+| 1040         | Europe    | Marinelli Bell Foundry      |
+| 1074         | Europe    | Affligem Brewery            |
+| 1135         | Europe    | Munke Mølle                 |
+| 1153         | Asia      | Ma Yu Ching's Bucket Chicken House |
 
 
 
@@ -122,7 +157,21 @@ SELECT year_founded, c.continent, business
 FROM businesses AS b
 INNER JOIN countries AS c
 ON b.country_code = c.country_code
-ORDER BY year_founded;
+ORDER BY year_founded
+LIMIT 10;
+
+| Year Founded | Continent       | Business                            |
+|--------------|-----------------|-------------------------------------|
+| 578          | Asia            | Kongō Gumi                          |
+| 803          | Europe          | St. Peter Stifts Kulinarium         |
+| 862          | Europe          | Staffelter Hof Winery               |
+| 864          | Europe          | Monnaie de Paris                    |
+| 886          | Europe          | The Royal Mint                      |
+| 900          | Europe          | Sean's Bar                          |
+| 1040         | Europe          | Marinelli Bell Foundry              |
+| 1074         | Europe          | Affligem Brewery                    |
+| 1135         | Europe          | Munke Mølle                         |
+| 1153         | Asia            | Ma Yu Ching's Bucket Chicken House  |
 
 
 
@@ -135,6 +184,20 @@ INNER JOIN categories AS b
 ON a.category_code = b.category_code
 INNER JOIN countries AS c
 ON a.country_code = c.country_code
+LIMIT 10;
+
+| Continent | Category                          | n  |
+|-----------|-----------------------------------|----|
+| Africa    | Banking & Finance                 | 17 |
+| Africa    | Postal Service                    | 9  |
+| Africa    | Aviation & Transport              | 10 |
+| Africa    | Media                             | 4  |
+| Africa    | Agriculture                       | 3  |
+| Africa    | Distillers, Vintners, & Breweries | 3  |
+| Africa    | Energy                            | 1  |
+| Africa    | Food & Beverages                  | 1  |
+| Africa    | Manufacturing & Production        | 1  |
+| Africa    | Mining                            | 1  |
 
 
 
@@ -149,6 +212,40 @@ INNER JOIN countries AS c2
     ON b.country_code = c2.country_code
 GROUP BY c2.continent, c1.category
 ORDER BY c2.continent
+LIMIT 30;
+
+| Continent | Category                          | n  |
+|-----------|-----------------------------------|----|
+| Africa    | Agriculture                       | 3  |
+| Africa    | Aviation & Transport              | 10 |
+| Africa    | Banking & Finance                 | 17 |
+| Africa    | Distillers, Vintners, & Breweries | 3  |
+| Africa    | Energy                            | 1  |
+| Africa    | Food & Beverages                  | 1  |
+| Africa    | Manufacturing & Production        | 1  |
+| Africa    | Media                             | 4  |
+| Africa    | Mining                            | 1  |
+| Africa    | Postal Service                    | 9  |
+| Asia      | Agriculture                       | 1  |
+| Asia      | Aviation & Transport              | 7  |
+| Asia      | Banking & Finance                 | 6  |
+| Asia      | Cafés, Restaurants & Bars         | 3  |
+| Asia      | Conglomerate                      | 3  |
+| Asia      | Construction                      | 2  |
+| Asia      | Defense                           | 1  |
+| Asia      | Distillers, Vintners, & Breweries | 2  |
+| Asia      | Energy                            | 3  |
+| Asia      | Food & Beverages                  | 2  |
+| Asia      | Manufacturing & Production        | 3  |
+| Asia      | Media                             | 1  |
+| Asia      | Mining                            | 1  |
+| Asia      | Postal Service                    | 2  |
+| Asia      | Retail                            | 3  |
+| Asia      | Telecommunications                | 1  |
+| Asia      | Tourism & Hotels                  | 1  |
+| Europe    | Agriculture                       | 1  |
+| Europe    | Banking & Finance                 | 5  |
+| Europe    | Cafés, Restaurants & Bars         | 2  |
 
 
 
@@ -163,6 +260,14 @@ INNER JOIN countries AS c2
     ON b.country_code = c2.country_code
 GROUP BY c2.continent, c1.category
 HAVING COUNT (*) > 5
-ORDER BY n DESC
+ORDER BY n DESC;
 
-
+| Continent | Category                          | n  |
+|-----------|-----------------------------------|----|
+| Africa    | Banking & Finance                 | 17 |
+| Europe    | Distillers, Vintners, & Breweries | 12 |
+| Africa    | Aviation & Transport              | 10 |
+| Africa    | Postal Service                    | 9  |
+| Europe    | Manufacturing & Production        | 8  |
+| Asia      | Aviation & Transport              | 7  |
+| Asia      | Banking & Finance                 | 6  |
