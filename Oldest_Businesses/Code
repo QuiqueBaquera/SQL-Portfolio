@@ -29,7 +29,8 @@ continent VARCHAR(50)
 
 SELECT MIN(year_founded), MAX(year_founded) FROM businesses;
 
-
+"min"	"max"
+578	1999
 
 
 
