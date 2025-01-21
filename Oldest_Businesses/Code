@@ -1,3 +1,8 @@
+/*This dataset contains information about the oldest businesses in the world. Let's explore it.*/
+
+
+
+
 CREATE TABLE categories (
   category_code VARCHAR(5) PRIMARY KEY,
   category VARCHAR(50)
@@ -106,7 +111,7 @@ LIMIT 5;
 
 
 
-/* Which are the oldest businesses by continent */
+/* Which are the oldest businesses by continent? */
 
 SELECT year_founded, c.continent, business
 FROM businesses AS b
