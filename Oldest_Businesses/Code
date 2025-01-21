@@ -29,7 +29,7 @@ continent VARCHAR(50)
 
 SELECT MIN(year_founded), MAX(year_founded) FROM businesses;
 
-!(Code/min max.PNG)
+!(Code/‪C:\Users\quiqu\Desktop\min max.PNG)
 "min"	"max"
 578	1999
 
