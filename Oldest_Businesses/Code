@@ -50,13 +50,20 @@ WHERE year_founded < 1000;
 SELECT * FROM businesses
 WHERE year_founded < 1000;
 
-"business"	                  "year_founded"	"category_code"	"country_code"
-"Kongō Gumi"	                     578	          "CAT6"	         "JPN"
-"St. Peter Stifts Kulinarium"	     803	          "CAT4"	         "AUT"
-"The Royal Mint"	                 886	          "CAT12"	         "GBR"
-"Monnaie de Paris "	               864	          "CAT12"	         "FRA"
-"Staffelter Hof Winery"         	 862	          "CAT9"	         "DEU"
-"Sean's Bar"	                     900	          "CAT4"	         "IRL"
+|"business"|"year_founded"|"category_code"|"country_code"|
+---------------------------------------------------------------
+|"Kongō Gumi"|578|"CAT6"|"JPN"|
+---------------------------------------------------------------
+|"St. Peter Stifts Kulinarium"|8031"CAT4"|"AUT"|
+---------------------------------------------------------------
+|"The Royal Mint"|886|"CAT12"|"GBR"|
+---------------------------------------------------------------
+|"Monnaie de Paris "|864|"CAT12"|"FRA"|
+---------------------------------------------------------------
+|"Staffelter Hof Winery"|862|"CAT9"|"DEU"|
+---------------------------------------------------------------
+|"Sean's Bar"|900|"CAT4"|"IRL"|
+---------------------------------------------------------------
 
 
 
