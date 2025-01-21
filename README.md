@@ -5,4 +5,4 @@ This repository provides a sample of data analysis work I completed using SQL an
 Project Name  | Description   |  Topic
 ------------- | ------------- | ------------------
 [The Oldest Businesses In The World](https://github.com/QuiqueBaquera/SQL-Portfolio/tree/main/Oldest_Businesses)  | Explored data from BusinessFinancing.co.uk on the world's oldest businesses: when they were founded and which industries they belong to | Data manipulation and joins
-[Aerofit](https://github.com/QuiqueBaquera/SQL-Portfolio/tree/main/Aerofit) | The company collected data on individuals who purchased a treadmill from the AeroFit stores during the prior three months |
+[Aerofit](https://github.com/QuiqueBaquera/SQL-Portfolio/tree/main/Aerofit) | The company collected data on individuals who purchased a treadmill from the Aerofit stores during the prior three months |
