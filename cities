@@ -12,3 +12,37 @@ insert_date DATE
 ALTER TABLE cities
 ADD city_id SERIAL PRIMARY KEY
 
+
+CREATE TABLE countries (
+country_name TEXT,
+country_code_2 TEXT,
+country_code_3 TEXT,
+region TEXT,
+sub_region TEXT,
+intermediate_region TEXT
+)
+
+
+ALTER TABLE countries
+ADD county_id SERIAL PRIMARY KEY
+
+
+CREATE TABLE currencies (
+country_code_2 TEXT,
+currency_name TEXT,
+currency_code TEXT
+)
+
+
+ALTER TABLE currencies
+ADD currency_id SERIAL PRIMARY KEY
+
+
+CREATE TABLE languages (
+language TEXT,
+country_code_2 TEXT
+)
+
+
+ALTER TABLE languages 
+ADD languages_id SERIAL PRIMARY KEY
