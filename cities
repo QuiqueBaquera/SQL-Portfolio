@@ -46,3 +46,21 @@ country_code_2 TEXT
 
 ALTER TABLE languages 
 ADD languages_id SERIAL PRIMARY KEY
+
+
+
+
+/* The data has to be cleaned */
+
+UPDATE countries
+SET country_name = TRIM(country_name)
+
+
+BEGIN;
+UPDATE countries
+SET country_name = TRANSLATE(country_name, '!¡?¿*$#%&', '');
+SELECT * FROM countries LIMIT 100;
+COMMIT;
+
+
+
