@@ -50,17 +50,32 @@ ADD languages_id SERIAL PRIMARY KEY
 
 
 
-/* The data has to be cleaned */
+/* The data has to be cleaned, so we will do these steps with each of the four tables*/
 
 UPDATE countries
-SET country_name = TRIM(country_name)
+SET country_name = TRIM(country_name);
+
 
 
 BEGIN;
 UPDATE countries
-SET country_name = TRANSLATE(country_name, '!¡?¿*$#%&', '');
-SELECT * FROM countries LIMIT 100;
+SET
+country_name = TRANSLATE(country_name, '!¡?¿*$#%&', ''),
+sub_region = TRANSLATE(sub_region, '¿?!¡$%€*#', ''),
+region = TRANSLATE(region, '¿?!¡$%€*#', ''),
+intermediate_region = TRANSLATE(intermediate_region, '¿?!¡$%€*#', '');
 COMMIT;
+
+
+
+UPDATE countries
+SET
+	country_name = LOWER(country_name),
+	country_code_2 = LOWER(country_code_2),
+	country_code_3 = LOWER(country_code_3),
+	region = LOWER(region),
+	sub_region = LOWER(sub_region), 
+	intermediate_region = LOWER(intermediate_region);
 
 
 
