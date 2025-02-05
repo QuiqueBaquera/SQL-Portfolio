@@ -200,3 +200,77 @@ ORDER BY LENGTH(country_name), country_name;
 
 
 
+/* List all of the countries and the total number of cities in the Southern Europe sub-region that were inserted in 2021. Capitalize the country names and order alphabetically by the LAST letter of the country name and the number of cities */
+
+SELECT INITCAP(country_name), COUNT(*) AS number_of_cities
+FROM countries
+JOIN cities
+ON countries.country_code_2 = cities.country_code_2
+WHERE sub_region = 'southern europe' AND insert_date BETWEEN '2021-01-01' AND '2021-12-31'
+GROUP BY country_name
+ORDER BY substring(country_name, length(country_name), 1), number_of_cities;
+
+
+| country                   | count |
+|---------------------------|-------|
+| "Andorra"                 | 5     |
+| "Albania"                 | 11    |
+| "Bosnia And Herzegovina"  | 15    |
+| "Croatia"                 | 22    |
+| "North Macedonia"         | 28    |
+| "Malta"                   | 32    |
+| "Serbia"                  | 58    |
+| "Slovenia"                | 74    |
+| "Greece"                  | 64    |
+| "Portugal"                | 109   |
+| "Spain"                   | 302   |
+| "San Marino"              | 2     |
+| "Montenegro"              | 12    |
+| "Italy"                   | 542   |
+
+
+
+
+/* List all of the countries in the region of Asia that did NOT have a city with an inserted date from June 2021 through Sept 2021 */
+
+SELECT INITCAP(country_name)
+FROM countries
+LEFT JOIN cities
+ON countries.country_code_2 = cities.country_code_2
+AND cities.insert_date BETWEEN '2021-06-01' AND '2021-10-01'
+WHERE countries.region = 'asia' 
+AND cities.country_code_2 IS NULL;
+
+
+| country            | 
+|--------------------|
+| "Kuwait"           |       
+| "Singapore"        |       
+| "Brunei Darussalam"|       
+| "Macao"            | 
+
+
+
+
+/* List the country, city name, population and city name length for the city names that are palindromes in the Western Asia sub-region. Format the population with a thousands separator (1,000) and format the length of the city name in roman numerals. Order by the length of the city name in descending order and alphabetically in ascending order */
+
+SELECT t1.country_name, t2.city_name, to_char(t2.population, '999G999') AS population, to_char(length(t2.city_name), 'RN') AS name_length
+FROM countries AS t1
+JOIN cities AS t2
+ON t1.country_code_2 = t2.country_code_2
+WHERE t2.city_name = reverse(t2.city_name)
+AND t1.sub_region = 'western asia'
+ORDER BY length(t2.city_name) DESC, t2.city_name ASC;
+
+
+| country                | city    | population | code |
+|------------------------|---------|------------|------|
+| "yemen"                | "hajjah"| 46.568     | VI   |
+| "syrian arab republic" | "hamah" | 696.863    | V    |
+| "turkey"               | "kavak" | 21.692     | V    |
+| "turkey"               | "kinik" | 29.803     | V    |
+| "turkey"               | "tut"   | 10.161     | III  |
+
+
+
+
