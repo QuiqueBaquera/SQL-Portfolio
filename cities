@@ -1,3 +1,5 @@
+/* Let's create the tables and add a SERIAL PRIMARY KEY to each one */
+
 CREATE TABLE cities (
 city_name VARCHAR(100),
 latitude DECIMAL(9,6),
@@ -55,8 +57,6 @@ ADD languages_id SERIAL PRIMARY KEY
 UPDATE countries
 SET country_name = TRIM(country_name);
 
-
-
 BEGIN;
 UPDATE countries
 SET
@@ -67,7 +67,6 @@ intermediate_region = TRANSLATE(intermediate_region, '¿?!¡$%€*#', '');
 COMMIT;
 
 
-
 UPDATE countries
 SET
 	country_name = LOWER(country_name),
@@ -76,6 +75,128 @@ SET
 	region = LOWER(region),
 	sub_region = LOWER(sub_region), 
 	intermediate_region = LOWER(intermediate_region);
+
+
+
+
+/* Now we have to see if there are duplicates in the tables and remove them */
+
+SELECT country_code_2, COUNT(*)
+FROM countries
+GROUP BY country_code_2
+HAVING COUNT(*) > 1;
+
+
+| country_code_2 | count |
+|----------------|-------|
+| "al"           | 2     |
+| "cn"           | 3     |
+| "sa"           | 2     |
+| "ie"           | 2     |
+| "ly"           | 2     |
+| "mo"           | 2     |
+| "re"           | 2     |
+| "ph"           | 2     |
+| "zw"           | 2     |
+| "az"           | 2     |
+| "kw"           | 2     |
+| "cy"           | 3     |
+| "rs"           | 2     |
+| "mh"           | 2     |
+
+
+
+
+/* Let's delete the duplicates */
+
+DELETE FROM countries AS table_1
+USING countries AS table_2
+WHERE table_1.country_id > table_2.country_id
+AND table_1.country_code_2 = table_2.country_code_2;
+
+
+
+
+/* List all of the regions and the total number of countries in each region. Order by country count in descending order and capitalize the region name */
+
+SELECT INITCAP(region), COUNT(*) 
+FROM countries
+GROUP BY region
+ORDER BY COUNT(*) DESC;
+
+
+| continent  | count |
+|------------|-------|
+| "Africa"   | 59    |
+| "Americas" | 57    |
+| "Asia"     | 50    |
+| "Europe"   | 48    |
+| "Oceania"  | 26    |
+| "Antartica"| 1     |
+
+
+
+
+/* List all of the sub-regions and the total number of cities in each sub-region. Order by sub-region name alphabetically */
+
+SELECT INITCAP(sub_region), COUNT(city_name) AS cities
+FROM countries
+JOIN cities
+ON countries.country_code_2 = cities.country_code_2
+GROUP BY sub_region
+ORDER BY sub_region;
+
+
+| region                           | count |
+|----------------------------------|-------|
+| "Australia And New Zealand"      | 329   |
+| "Central Asia"                   | 560   |
+| "Eastern Asia"                   | 3162  |
+| "Eastern Europe"                 | 2959  |
+| "Latin America And The Caribbean"| 7204  |
+| "Melanesia"                      | 60    |
+| "Micronesia"                     | 15    |
+| "Northern Africa"                | 1152  |
+| "Northern America"               | 5844  |
+| "Northern Europe"                | 2025  |
+| "Polynesia"                      | 22    |
+| "South-Eastern Asia"             | 2627  |
+| "Southern Asia"                  | 6848  |
+| "Southern Europe"                | 3238  |
+| "Sub-Saharan Africa"             | 3223  |
+| "Western Asia"                   | 1400  |
+| "Western Europe"                 | 3952  |
+
+
+
+
+/* List all of the countries and the total number of cities in the Northern Europe sub-region. List the country names in uppercase and order the list by the length of the country name and alphabetically in ascending order */
+
+SELECT INITCAP(country_name), COUNT(*) AS number_of_cities
+FROM countries
+JOIN cities
+ON countries.country_code_2 = cities.country_code_2
+WHERE sub_region = 'northern europe'
+GROUP BY country_name
+ORDER BY LENGTH(country_name), country_name;
+
+
+| country          | count |
+|------------------|-------|
+| "Jersey"         | 1     |
+| "Latvia"         | 39    |
+| "Norway"         | 127   |
+| "Sweden"         | 148   |
+| "Denmark"        | 75    |
+| "Estonia"        | 20    |
+| "Finland"        | 142   |
+| "Iceland"        | 12    |
+| "Ireland"        | 64    |
+| "Lithuania"      | 61    |
+| "Isle Of Man"    | 2     |
+| "Faroe Islands"  | 29    |
+| "United Kingdom" | 1305  |
+
 
 
 
