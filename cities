@@ -274,3 +274,87 @@ ORDER BY length(t2.city_name) DESC, t2.city_name ASC;
 
 
 
+/* List all of the countries that end in 'stan'. Make your query case-insensitive and list whether the total population of the cities listed is an odd or even number for cities inserted in 2022. Order by whether the population value is odd or even in ascending order and country name in alphabetical order */
+
+SELECT t1.country_name, to_char(SUM(t2.population), '99G999G999'),
+CASE 
+WHEN (SUM(t2.population) % 2) = 0 THEN 'Even'
+ELSE 'Odd'
+END AS odd_or_even
+FROM countries AS t1
+JOIN cities AS t2
+ON t1.country_code_2 = t2.country_code_2
+WHERE t1.country_name LIKE '%stan'
+AND EXTRACT ('year' FROM t2.insert_date) = 2022
+GROUP BY t1.country_name
+ORDER BY odd_or_even, t1.country_name;
+
+
+| country      | population  | code |
+|--------------|-------------|------|
+| afghanistan  | 6,006,530   | Even |
+| kazakhstan   | 4,298,264   | Even |
+| kyrgyzstan   | 1,017,644   | Even |
+| pakistan     | 26,344,480  | Even |
+| tajikistan   | 2,720,953   | Odd  |
+| turkmenistan | 419,607     | Odd  |
+| uzbekistan   | 3,035,547   | Odd  |
+
+
+
+
+/* List the third most populated city ranked by region WITHOUT using limit or offset. List the region name, city name, population and order the results by region */
+
+WITH city_rank AS (
+SELECT t1.region, t2.city_name, t2.population AS third_largest_population,
+DENSE_RANK() OVER (PARTITION BY t1.region ORDER BY t2.population DESC) AS rnk
+FROM countries AS t1
+JOIN cities AS t2
+ON t1.country_code_2 = t2.country_code_2
+WHERE t2.population IS NOT NULL
+GROUP BY t1.region, t2.city_name, t2.population
+)
+
+SELECT initcap(region), initcap(city_name), to_char(third_largest_population, '99G999G999')
+FROM city_rank
+WHERE rnk = 3;
+
+
+| continent | city     | population  |
+|-----------|----------|-------------|
+| Africa    | Kinshasa | 12,836,000  |
+| Americas  | New York | 18,972,871  |
+| Asia      | Delhi    | 32,226,000  |
+| Europe    | Paris    | 11,060,000  |
+| Oceania   | Brisbane | 2,360,241   |
+
+
+
+
+/* List the bottom third of all countries in the Western Asia sub-region that speak Arabic. Include the row number and country name. Order by row number */
+
+WITH bottom_third AS (
+SELECT 
+ROW_NUMBER() OVER(ORDER BY t1.country_name) AS rn,
+NTILE(3) OVER(ORDER BY t1.country_name) AS nt,
+t1.country_name
+FROM countries AS t1
+JOIN languages AS t2
+ON t1.country_code_2 = t2.country_code_2
+WHERE t1.sub_region = 'western asia' AND t2.language = 'arabic'
+)
+SELECT rn AS country_number, country_name
+FROM bottom_third
+WHERE nt = 3;
+
+
+| number | country                |
+|--------|------------------------|
+| 9      | saudi arabia           |
+| 10     | syrian arab republic   |
+| 11     | united arab emirates   |
+| 12     | yemen                  |
+
+
+
+
