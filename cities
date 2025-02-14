@@ -358,3 +358,38 @@ WHERE nt = 3;
 
 
 
+/* Create a query that lists country name, capital name, population, languages spoken and currency name for countries in the Northern Africa sub-region. There can be multiple currency names and languages spoken per country. Add multiple values for the same field into an array */
+
+WITH get_values AS (
+SELECT t1.country_name, t2.city_name, t2.population, array_agg(t3.language) AS languages, t4.currency_name AS currency
+FROM countries AS t1
+JOIN cities AS t2
+ON t1.country_code_2 = t2.country_code_2
+JOIN languages AS t3
+ON t1.country_code_2 = t3.country_code_2
+JOIN currencies AS t4
+ON t1.country_code_2 = t4.country_code_2
+WHERE t1.sub_region = 'northern africa'
+AND t2.capital = 'True'
+GROUP BY t1.country_name, t2.city_name, t2.population, t4.currency_name
+)
+SELECT *
+FROM get_values;
+
+
+Here is the transformed information in the requested format:
+
+| number | country | capital  | population | languages                                         | currency        |
+|--------|---------|----------|------------|---------------------------------------------------|-----------------|
+| 1      | algeria | algiers  | 3415811    | {french, arabic, kabyle}                          | algerian dinar  |
+| 2      | egypt   | cairo    | 20296000   | {arabic}                                          | egyptian pound  |
+| 3      | libya   | tripoli  | 1293016    | {arabic}                                          | libyan dinar    |
+| 4      | morocco | rabat    | 572717     | {arabic, tachelhit, "moroccan tamazight", french} | moroccan dirham |
+| 5      | sudan   | khartoum | 7869000    | {arabic, english}                                 | sudanese pound  |
+| 6      | tunisia | tunis    | 1056247    | {french, arabic}                                  | tunisian dinar  |
+
+
+
+
+/* Produce a query that returns the city names for cities in the U.S. that were inserted on April, 28th 2022. List how many vowels and consonants are present in the city name and concatenate their percentage to the their respective count in parenthesis */
+
