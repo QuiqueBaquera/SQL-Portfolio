@@ -1,3 +1,6 @@
+This database has information about cities all around the world
+
+
 /* Let's create the tables and add a SERIAL PRIMARY KEY to each one */
 
 CREATE TABLE cities (
@@ -462,6 +465,55 @@ ORDER BY insert_date;
 | 2022-04-23 | La Prairie   |
 | 2022-04-24 | Elliot Lake  |
 | 2022-04-25 | Lachute      |
+
+
+
+
+/* Create a view that lists the month-year, the number of cities inserted for that month, a running city count total and the month over month percentage growth for 2021 */
+
+CREATE VIEW growth_2021 AS (
+WITH get_month_count AS (
+SELECT date_trunc('month', insert_date) AS single_month, COUNT(*) AS monthly_count
+FROM cities
+WHERE EXTRACT ('year' FROM insert_date) = 2021
+GROUP BY single_month
+ORDER BY single_month),
+
+get_running_total AS (
+SELECT single_month::DATE, monthly_count, SUM(monthly_count) OVER (ORDER BY single_month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS total_num_cities
+FROM get_month_count),
+
+get_month_over_month AS (
+SELECT single_month, monthly_count, total_num_cities, 
+ROUND(100 * ((total_num_cities - Lag(total_num_cities, 1) OVER (ORDER BY single_month)) / Lag(total_num_cities, 1) OVER (ORDER BY single_month))::NUMERIC, 2) AS month_over_month
+FROM get_running_total)
+
+SELECT
+to_char(single_month, 'Mon-YYYY') AS month_year,
+to_char(monthly_count, '9G999') AS cities_inserted,
+to_char(total_num_cities, '99G999') AS running_total,
+to_char(month_over_month, 'sg99.99') || '%' AS month_over_month
+FROM get_month_over_month);
+
+SELECT *
+FROM growth_2021;
+
+
+| Month      | Value (in billions) | Cumulative Value (in billions)| Percentage Change |
+|------------|---------------------|-------------------------------|-------------------|
+| Jan-2021   | 1.471               | 1.471                         |                   |
+| Feb-2021   | 1.291               | 2.762                         | +87.76%           |
+| Mar-2021   | 1.485               | 4.247                         | +53.77%           |
+| Apr-2021   | 1.508               | 5.755                         | +35.51%           |
+| May-2021   | 1.509               | 7.264                         | +26.22%           |
+| Jun-2021   | 1.395               | 8.659                         | +19.20%           |
+| Jul-2021   | 1.394               | 10.053                        | +16.10%           |
+| Aug-2021   | 1.481               | 11.534                        | +14.73%           |
+| Sep-2021   | 1.452               | 12.986                        | +12.59%           |
+| Oct-2021   | 1.446               | 14.432                        | +11.14%           |
+| Nov-2021   | 1.378               | 15.810                        | +9.55%            |
+| Dec-2021   | 1.472               | 17.282                        | +9.31%            |
+
 
 
 
