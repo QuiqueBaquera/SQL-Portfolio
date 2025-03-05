@@ -255,6 +255,71 @@ AND cities.country_code_2 IS NULL;
 
 
 
+/* Classificate the cities by population using a 'CASE' statement */
+
+SELECT initcap(city_name) AS city, to_char(population, '99G999G999') AS population,
+CASE 
+WHEN population > 10000000 THEN 'Megacity'
+WHEN population > 1000000 THEN 'Supercity'
+WHEN population > 100000 THEN 'City'
+ELSE 'Small City'
+END AS city_classification
+FROM cities
+WHERE population IS NOT NULL
+ORDER BY population DESC
+LIMIT 10;
+
+
+| City         | Population   | Classification |
+|--------------|--------------|----------------|
+| Tokyo        | 37.732.000   | Megacity       |
+| Jakarta      | 33.756.000   | Megacity       |
+| Delhi        | 32.226.000   | Megacity       |
+| Guangzhou    | 26.940.000   | Megacity       |
+| Mumbai       | 24.973.000   | Megacity       |
+| Manila       | 24.922.000   | Megacity       |
+| Shanghai     | 24.073.000   | Megacity       |
+| Sao Paulo    | 23.086.000   | Megacity       |
+| Seoul        | 23.016.000   | Megacity       |
+| Mexico City  | 21.804.000   | Megacity       |
+
+
+
+
+/* Use SUBQUERIES to create a list of cities with a population larger than 5 million, where they speak English and show 1 of their currencies */
+
+SELECT initcap(t1.city_name), to_char(t1.population, '99G999G999'), t1.country_code_2,
+(SELECT COALESCE(
+(SELECT initcap(currency_name)
+FROM currencies AS t2
+WHERE t1.country_code_2 = t2.country_code_2
+LIMIT 1), 'Unknown')) AS currency
+FROM cities AS t1
+WHERE t1.population > 5000000 AND t1.country_code_2 IN
+(SELECT t3.country_code_2
+FROM languages AS t3
+WHERE language = 'english')
+ORDER BY t1.population DESC
+LIMIT 10;
+
+
+| City         | Population   | Country Code | Currency          |
+|--------------|--------------|--------------|-------------------|
+| Tokyo        | 37.732.000   | jp           | Yen               |
+| Jakarta      | 33.756.000   | id           | Unknown           |
+| Delhi        | 32.226.000   | in           | Indian Rupee      |
+| Guangzhou    | 26.940.000   | cn           | Yuan Renminbi     |
+| Mumbai       | 24.973.000   | in           | Indian Rupee      |
+| Manila       | 24.922.000   | ph           | Philippine Peso   |
+| Shanghai     | 24.073.000   | cn           | Yuan Renminbi     |
+| Sao Paulo    | 23.086.000   | br           | Brazilian Real    |
+| Seoul        | 23.016.000   | kr           | Won               |
+| Mexico City  | 21.804.000   | mx           | Mexican Peso      |
+
+
+
+
+
 /* List the country, city name, population and city name length for the city names that are palindromes in the Western Asia sub-region. Format the population with a thousands separator (1,000) and format the length of the city name in roman numerals. Order by the length of the city name in descending order and alphabetically in ascending order */
 
 SELECT t1.country_name, t2.city_name, to_char(t2.population, '999G999') AS population, to_char(length(t2.city_name), 'RN') AS name_length
