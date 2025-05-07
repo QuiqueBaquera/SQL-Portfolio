@@ -57,7 +57,7 @@ ORDER BY avg_math_score DESC;
 
 
 
-/* Find the career_aspirations that have an average english_score greater than 75. Display the career aspiration and the average score */
+/* Find the career_aspirations that have an average english_score greater than 75. Display the career aspirations and the average score */
 
 SELECT career_aspiration, AVG(english_score) AS avg_english_score
 FROM students
@@ -90,7 +90,7 @@ ORDER BY avg_english_score DESC;
 
 
 
-/* Identify students who have a math_score higher than the average math score. List their first_name, last_name, and math_score */
+/* Identify students who have a math_score higher than the average. List their first_name, last_name, and math_score */
 
 SELECT first_name, last_name, math_score
 FROM students
@@ -163,7 +163,7 @@ WHERE email LIKE '%academy%';
 
 
 
-/* Calculate the lowest (FLOOR), highest (CEIL), and average (ROUND to two decimal places) chemistry_score for each carreraspirats. Display the carrer aspirants, lowest score, highest score, and average score */
+/* Calculate the lowest (FLOOR), highest (CEIL), and average (ROUND to two decimal places) chemistry_score for each carrer aspirants. Display the carrer aspirants, lowest score, highest score, and average score */
 
 SELECT gender,
 FLOOR(MIN(chemistry_score)) AS lowest_score,
