@@ -1,0 +1,277 @@
+/* This database contains the scores from 2000 students. When some of the results are to extense I'll show the first 10 rows */
+
+/* First  create the table */
+
+CREATE TABLE students (
+    id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100),
+    gender VARCHAR(10),
+    part_time_job BOOLEAN,
+    absence_days INT,
+    extracurricular_activities BOOLEAN,
+    weekly_self_study_hours INT,
+    career_aspiration VARCHAR(50),
+    math_score INT,
+    history_score INT,
+    physics_score INT,
+    chemistry_score INT,
+    biology_score INT,
+    english_score INT,
+    geography_score INT
+);
+
+
+
+
+/* Calculate the average math_score for each career_aspiration. Order the results by the average score in descending order */
+
+SELECT career_aspiration, AVG(math_score) AS avg_math_score
+FROM students
+GROUP BY career_aspiration
+ORDER BY avg_math_score DESC;
+
+
+| profession                | score              |
+|---------------------------|--------------------|
+| "Software Engineer"       | 92.1460317460317460 |
+| "Doctor"                  | 92.0252100840336134 |
+| "Game Developer"          | 89.9523809523809524 |
+| "Construction Engineer"   | 89.7205882352941176 |
+| "Stock Investor"          | 88.1095890410958904 |
+| "Scientist"               | 87.6666666666666667 |
+| "Accountant"              | 87.3571428571428571 |
+| "Banker"                  | 87.0828402366863905 |
+| "Lawyer"                  | 86.0362318840579710 |
+| "Designer"                | 82.3571428571428571 |
+| "Government Officer"      | 80.6557377049180328 |
+| "Artist"                  | 80.1194029850746269 |
+| "Unknown"                 | 79.8430493273542601 |
+| "Teacher"                 | 78.5932203389830508 |
+| "Writer"                  | 78.3125000000000000 |
+| "Real Estate Developer"   | 76.4216867469879518 |
+| "Business Owner"          | 69.6440129449838188 |
+
+
+
+
+
+/* Find the career_aspirations that have an average english_score greater than 75. Display the career aspiration and the average score */
+
+SELECT career_aspiration, AVG(english_score) AS avg_english_score
+FROM students
+GROUP BY career_aspiration
+HAVING AVG(english_score) > 75
+ORDER BY avg_english_score DESC;
+
+
+| profession                | score              |
+|---------------------------|--------------------|
+| "Writer"                  | 94.3750000000000000 |
+| "Lawyer"                  | 89.6449275362318841 |
+| "Banker"                  | 86.8224852071005917 |
+| "Teacher"                 | 85.3898305084745763 |
+| "Doctor"                  | 85.1764705882352941 |
+| "Government Officer"      | 82.4262295081967213 |
+| "Designer"                | 82.2857142857142857 |
+| "Scientist"               | 81.8205128205128205 |
+| "Construction Engineer"   | 81.0588235294117647 |
+| "Software Engineer"       | 80.8666666666666667 |
+| "Unknown"                 | 79.7668161434977578 |
+| "Stock Investor"          | 79.7534246575342466 |
+| "Game Developer"          | 79.3015873015873016 |
+| "Accountant"              | 78.9444444444444444 |
+| "Artist"                  | 78.5820895522388060 |
+| "Real Estate Developer"   | 77.9638554216867470 |
+| "Business Owner"          | 75.1326860841423948 |
+
+
+
+
+
+/* Identify students who have a math_score higher than the average math score. List their first_name, last_name, and math_score */
+
+SELECT first_name, last_name, math_score
+FROM students
+WHERE math_score > (SELECT AVG(math_score) FROM students);
+
+
+| first_name   | last_name       | score |
+|--------------|-----------------|-------|
+| "Danielle"   | "Sandoval"      | 90    |
+| "Anthony"    | "Campos"        | 84    |
+| "Kelly"      | "Wade"          | 93    |
+| "Anthony"    | "Smith"         | 99    |
+| "George"     | "Short"         | 95    |
+| "Stanley"    | "Gutierrez"     | 94    |
+| "Audrey"     | "Simpson"       | 98    |
+| "Patricia"   | "Gomez"         | 94    |
+| "Laura"      | "Jackson"       | 96    |
+| "Roger"      | "Wiley"         | 94    |
+| "Vicki"      | "Thompson"      | 92    |
+| "Maxwell"    | "Davidson"      | 86    |
+| "Jonathan"   | "Werner"        | 92    |
+| "Angela"     | "Rios"          | 99    |
+| "Tim"        | "Nichols"       | 100   |
+| ...          | ...             | ...   |
+
+
+
+
+/* Rank students within each career_aspiration category by their physics_score in descending order. Display the first_name, last_name, career_aspiration, physics_score, and the rank */
+
+SELECT first_name, last_name, career_aspiration, physics_score,
+RANK() OVER (PARTITION BY career_aspiration ORDER BY physics_score DESC) AS rank_in_career
+FROM students
+ORDER BY career_aspiration, rank_in_career;
+
+
+| first_name   | last_name       | profession  | score | rank |
+|--------------|-----------------|-------------|-------|------|
+| "Anthony"    | "Jackson"       | "Accountant"| 100   | 1    |
+| "Jeffrey"    | "Blanchard"     | "Accountant"| 99    | 5    |
+| "Wanda"      | "Baxter"        | "Accountant"| 99    | 5    |
+| "Monica"     | "Williams"      | "Accountant"| 99    | 5    |
+| "Timothy"    | "Bryant"        | "Accountant"| 98    | 8    |
+| "Jeffrey"    | "Miller"        | "Accountant"| 98    | 8    |
+| "Sara"       | "Johnson"       | "Accountant"| 97    | 10   |
+
+
+
+
+ /* For each student, create a new column full_name by concatenating first_name and last_name with a space in between. Show the full_name and email columns where the email contains the string "academy" */
+
+SELECT CONCAT(first_name, ' ', last_name) AS full_name, email
+FROM students
+WHERE email LIKE '%academy%';
+
+
+| full_name            | email                                    |
+|----------------------|------------------------------------------|
+| "Paul Casey"         | "paul.casey.1@gslingacademy.com"         |
+| "Danielle Sandoval"  | "danielle.sandoval.2@gslingacademy.com"  |
+| "Tina Andrews"       | "tina.andrews.3@gslingacademy.com"       |
+| "Tara Clark"         | "tara.clark.4@gslingacademy.com"         |
+| "Anthony Campos"     | "anthony.campos.5@gslingacademy.com"     |
+| "Kelly Wade"         | "kelly.wade.6@gslingacademy.com"         |
+| "Anthony Smith"      | "anthony.smith.7@gslingacademy.com"      |
+| "George Short"       | "george.short.8@gslingacademy.com"       |
+| "Stanley Gutierrez"  | "stanley.gutierrez.9@gslingacademy.com"  |
+| "Audrey Simpson"     | "audrey.simpson.10@gslingacademy.com"    |
+
+
+
+
+/* Calculate the lowest (FLOOR), highest (CEIL), and average (ROUND to two decimal places) chemistry_score for each carreraspirats. Display the carrer aspirants, lowest score, highest score, and average score */
+
+SELECT gender,
+FLOOR(MIN(chemistry_score)) AS lowest_score,
+CEIL(MAX(chemistry_score)) AS highest_score,
+ROUND(AVG(chemistry_score), 2) AS average_score
+FROM students
+GROUP BY gender;
+
+
+| gender   | count | max_score | avg_score |
+|----------|-------|-----------|-----------|
+| "female" | 50    | 100       | 80.38     |
+| "male"   | 50    | 100       | 79.61     |
+
+
+
+
+/* Find career aspirations where the average history_score is above 85 and at least 5 students aspire to that career. List the career_aspiration and the average score */
+
+SELECT career_aspiration, AVG(history_score) AS average_history_score
+FROM students
+GROUP BY career_aspiration
+HAVING AVG(history_score) > 85 AND COUNT(id) >= 5;
+
+
+| profession | score             |
+|------------|-------------------|
+| "Lawyer"   | 89.18840579710145 |
+| "Doctor"   | 86.73109243697479 |
+
+
+
+
+/* Identify students who score above average in both biology and chemistry, compared to the average for those subjects. Display their id, first_name, last_name, biology_score, and chemistry_score */ 
+
+SELECT id, first_name, last_name, biology_score, chemistry_score
+FROM students
+WHERE biology_score > (SELECT AVG(biology_score) FROM students) 
+AND chemistry_score > (SELECT AVG(chemistry_score) FROM students);
+
+
+| ID  | first_name  | last_name    | score1 | score2 |
+|-----|-------------|--------------|--------|--------|
+| 2   | "Danielle"  | "Sandoval"   | 90     | 100    |
+| 4   | "Tara"      | "Clark"      | 89     | 80     |
+| 9   | "Stanley"   | "Gutierrez"  | 81     | 85     |
+| 15  | "Laura"     | "Jackson"    | 92     | 92     |
+| 17  | "Vicki"     | "Thompson"   | 80     | 91     |
+| 19  | "Jonathan"  | "Werner"     | 97     | 99     |
+| 22  | "Kyle"      | "Willis"     | 83     | 94     |
+| 25  | "Cassandra" | "West"       | 95     | 88     |
+| 26  | "Patricia"  | "Chavez"     | 93     | 81     |
+| 31  | "Angie"     | "Miller"     | 88     | 100    |
+
+
+
+
+/* Calculate the percentage of absence days for each student relative to the total absence days recorded for all students. Display the id, first_name, last_name, and the calculated percentage, rounded to two decimal places. Order the results by the percentage in descending order */
+
+SELECT id, first_name, last_name, 
+ROUND((absence_days::decimal / (SELECT SUM(absence_days) FROM students) * 100), 2) AS absence_percentage
+FROM students
+ORDER BY absence_percentage DESC;
+
+
+| ID   | first_name   | last_name    | value |
+|------|--------------|--------------|-------|
+| 1604 | "Eric"       | "Matthews"   | 0.14  |
+| 845  | "Stephanie"  | "Bush"       | 0.14  |
+| 1854 | "Kimberly"   | "Haley"      | 0.14  |
+| 662  | "Samuel"     | "Anderson"   | 0.14  |
+| 1712 | "Brenda"     | "Morales"    | 0.14  |
+| 14   | "Pamela"     | "Jackson"    | 0.14  |
+| 1323 | "Maureen"    | "Norman"     | 0.14  |
+| 1275 | "Shawn"      | "Cameron"    | 0.14  |
+| 535  | "Thomas"     | "Clark"      | 0.14  |
+| 1888 | "Catherine"  | "Coffey"     | 0.14  |
+
+
+
+
+/* Identify students who have scores above 80 in at least three out of the six subjects: math, history, physics, chemistry, biology, and English. Display their id, first_name, last_name, and the count of subjects where they scored above 80 */
+
+SELECT id, first_name, last_name,
+(CASE WHEN math_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN history_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN physics_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN chemistry_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN biology_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN english_score > 80 THEN 1 ELSE 0 END) AS subjects_above_80
+FROM students
+WHERE (CASE WHEN math_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN history_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN physics_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN chemistry_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN biology_score > 80 THEN 1 ELSE 0 END +
+CASE WHEN english_score > 80 THEN 1 ELSE 0 END) >= 3;
+
+
+| ID   | first_name   | last_name      | value |
+|------|--------------|----------------|-------|
+| 1    | "Paul"       | "Casey"        | 3     |
+| 2    | "Danielle"   | "Sandoval"     | 6     |
+| 3    | "Tina"       | "Andrews"      | 4     |
+| 7    | "Anthony"    | "Smith"        | 4     |
+| 8    | "George"     | "Short"        | 4     |
+| 9    | "Stanley"    | "Gutierrez"    | 4     |
+| 11   | "Gabrielle"  | "White"        | 3     |
+| 14   | "Pamela"     | "Jackson"      | 4     |
+| 15   | "Laura"      | "Jackson"      | 6     |
+| 17   | "Vicki"      | "Thompson"     | 4     |
